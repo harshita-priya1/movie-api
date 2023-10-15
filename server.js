@@ -7,6 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.get("/all", (req, res) => {
+  const pg = parseInt(req.query.pg) || 0;
+  const item = parseInt(req.query.item) || 5;
   const results = [];
   fs.createReadStream("./data/movies_data.csv")
     .pipe(csv())
@@ -14,11 +16,18 @@ app.get("/all", (req, res) => {
       results.push(data);
     })
     .on("end", () => {
-      res.json(results);
+      const startIndex = pg * item;
+      const newResult = [];
+      for (let i = startIndex; i < item + startIndex; i++) {
+        newResult.push(results[i]);
+      }
+      res.json(newResult);
     });
 });
 
 app.get("/search", (req, res) => {
+  const pg = parseInt(req.query.pg) || 0;
+  const item = parseInt(req.query.item) || 5;
   const n1 = req.query.name;
   const name = n1.toLowerCase();
   const results = [];
@@ -31,11 +40,18 @@ app.get("/search", (req, res) => {
       }
     })
     .on("end", () => {
-      res.json(results);
+      const startIndex = pg * item;
+      const newResult = [];
+      for (let i = startIndex; i < item + startIndex; i++) {
+        newResult.push(results[i]);
+      }
+      res.json(newResult);
     });
 });
 
 app.get("/rating/:r", (req, res) => {
+  const pg = parseInt(req.query.pg) || 0;
+  const item = parseInt(req.query.item) || 5;
   const rate = req.params.r;
   const results = [];
   fs.createReadStream("./data/movies_data.csv")
@@ -47,11 +63,18 @@ app.get("/rating/:r", (req, res) => {
       }
     })
     .on("end", () => {
-      res.json(results);
+      const startIndex = pg * item;
+      const newResult = [];
+      for (let i = startIndex; i < item + startIndex; i++) {
+        newResult.push(results[i]);
+      }
+      res.json(newResult);
     });
 });
 
 app.get("/popular", (req, res) => {
+  const pg = parseInt(req.query.pg) || 0;
+  const item = parseInt(req.query.item) || 5;
   const results = [];
   fs.createReadStream("./data/movies_data.csv")
     .pipe(csv())
@@ -62,11 +85,18 @@ app.get("/popular", (req, res) => {
       results.sort(
         (a, b) => parseInt(b.No_of_Ratings) - parseInt(a.No_of_Ratings)
       );
-      res.json(results);
+      const startIndex = pg * item;
+      const newResult = [];
+      for (let i = startIndex; i < item + startIndex; i++) {
+        newResult.push(results[i]);
+      }
+      res.json(newResult);
     });
 });
 
 app.get("/released/:ry", (req, res) => {
+  const pg = parseInt(req.query.pg) || 0;
+  const item = parseInt(req.query.item) || 5;
   const ry = req.params.ry;
   const results = [];
   fs.createReadStream("./data/movies_data.csv")
@@ -80,11 +110,18 @@ app.get("/released/:ry", (req, res) => {
       results.sort(
         (a, b) => parseInt(b.Movie_Rating) - parseInt(a.Movie_Rating)
       );
-      res.json(results);
+      const startIndex = pg * item;
+      const newResult = [];
+      for (let i = startIndex; i < item + startIndex; i++) {
+        newResult.push(results[i]);
+      }
+      res.json(newResult);
     });
 });
 
 app.get("/director", (req, res) => {
+  const pg = parseInt(req.query.pg) || 0;
+  const item = parseInt(req.query.item) || 5;
   const n1 = req.query.name;
   const name = n1.toLowerCase();
   const results = [];
@@ -97,11 +134,18 @@ app.get("/director", (req, res) => {
       }
     })
     .on("end", () => {
-      res.json(results);
+      const startIndex = pg * item;
+      const newResult = [];
+      for (let i = startIndex; i < item + startIndex; i++) {
+        newResult.push(results[i]);
+      }
+      res.json(newResult);
     });
 });
 
 app.get("/actor", (req, res) => {
+  const pg = parseInt(req.query.pg) || 0;
+  const item = parseInt(req.query.item) || 5;
   const n1 = req.query.name;
   const name = n1.toLowerCase();
   const results = [];
@@ -114,11 +158,18 @@ app.get("/actor", (req, res) => {
       }
     })
     .on("end", () => {
-      res.json(results);
+      const startIndex = pg * item;
+      const newResult = [];
+      for (let i = startIndex; i < item + startIndex; i++) {
+        newResult.push(results[i]);
+      }
+      res.json(newResult);
     });
 });
 
 app.get("/free", (req, res) => {
+  const pg = parseInt(req.query.pg) || 0;
+  const item = parseInt(req.query.item) || 5;
   const free = [];
   const paid = [];
   fs.createReadStream("./data/movies_data.csv")
@@ -133,8 +184,13 @@ app.get("/free", (req, res) => {
     .on("end", () => {
       paid.sort((a, b) => a.Price - b.Price);
       free.sort((a, b) => b.Movie_Rating - a.Movie_Rating);
-      const all = free.concat(paid);
-      res.json(all);
+      const results = free.concat(paid);
+      const startIndex = pg * item;
+      const newResult = [];
+      for (let i = startIndex; i < item + startIndex; i++) {
+        newResult.push(results[i]);
+      }
+      res.json(newResult);
     });
 });
 
