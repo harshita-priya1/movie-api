@@ -118,6 +118,26 @@ app.get("/actor", (req, res) => {
     });
 });
 
+app.get("/free", (req, res) => {
+  const free = [];
+  const paid = [];
+  fs.createReadStream("./data/movies_data.csv")
+    .pipe(csv())
+    .on("data", (data) => {
+      if (data.Price === "") {
+        free.push(data);
+      } else {
+        paid.push(data);
+      }
+    })
+    .on("end", () => {
+      paid.sort((a, b) => a.Price - b.Price);
+      free.sort((a, b) => b.Movie_Rating - a.Movie_Rating);
+      const all = free.concat(paid);
+      res.json(all);
+    });
+});
+
 app.listen(PORT, () => {
   console.log(`Listening on port : ${PORT}`);
 });
