@@ -24,6 +24,8 @@ movieRouter.get("/director", directorMovie);
 movieRouter.get("/actor", actorMovie);
 movieRouter.get("/free", freeMovie);
 
+module.exports = movieRouter;
+
 // movieRouter.get("/all", (req, res) => {
 //   const pg = parseInt(req.query.pg) || 0;
 //   const item = parseInt(req.query.item) || 5;
@@ -111,96 +113,98 @@ movieRouter.get("/free", freeMovie);
 //     });
 // });
 
-movieRouter.get("/released/:ry", (req, res) => {
-  let pg = parseInt(req.query.pg) || 1;
-  let item = parseInt(req.query.item) || 5;
-  const ry = req.params.ry;
+// Has the corrected paginated code
 
-  const results = [];
+// movieRouter.get("/released/:ry", (req, res) => {
+//   let pg = parseInt(req.query.pg) || 1;
+//   let item = parseInt(req.query.item) || 5;
+//   const ry = req.params.ry;
 
-  fs.createReadStream("./data/movies_data.csv")
-    .pipe(csv())
+//   const results = [];
 
-    .on("data", (data) => {
-      if (ry === data.ReleaseYear) {
-        results.push(data);
-      }
-    })
+//   fs.createReadStream("./data/movies_data.csv")
+//     .pipe(csv())
 
-    .on("end", () => {
-      results.sort(
-        (a, b) => parseInt(b.Movie_Rating) - parseInt(a.Movie_Rating)
-      );
-      const ressize = results.length;
-      let startIndex = (pg - 1) * item;
-      const newResult = [];
+//     .on("data", (data) => {
+//       if (ry === data.ReleaseYear) {
+//         results.push(data);
+//       }
+//     })
 
-      if (startIndex >= ressize) {
-        if (item > ressize) item = 5;
-        startIndex = ressize - (ressize % item ? ressize % item : item);
-        if (pg * item > ressize) pg = Math.floor(ressize / item) + 1;
-      }
+//     .on("end", () => {
+//       results.sort(
+//         (a, b) => parseInt(b.Movie_Rating) - parseInt(a.Movie_Rating)
+//       );
+//       const ressize = results.length;
+//       let startIndex = (pg - 1) * item;
+//       const newResult = [];
 
-      for (let i = startIndex; i < item + startIndex && i < ressize; i++) {
-        newResult.push(results[i]);
-      }
-      let totalpages = Math.floor(ressize / item) + 1;
-      res.json({
-        pageno: pg,
-        totalpages: totalpages,
-        totalItems: ressize,
-        data: newResult,
-      });
-    });
-});
+//       if (startIndex >= ressize) {
+//         if (item > ressize) item = 5;
+//         startIndex = ressize - (ressize % item ? ressize % item : item);
+//         if (pg * item > ressize) pg = Math.floor(ressize / item) + 1;
+//       }
 
-movieRouter.get("/director", (req, res) => {
-  const pg = parseInt(req.query.pg) || 0;
-  const item = parseInt(req.query.item) || 5;
-  const n1 = req.query.name;
-  const name = n1.toLowerCase();
-  const results = [];
-  fs.createReadStream("./data/movies_data.csv")
-    .pipe(csv())
-    .on("data", (data) => {
-      const director = data.Directed_By.toLowerCase();
-      if (director.includes(name)) {
-        results.push(data);
-      }
-    })
-    .on("end", () => {
-      const startIndex = pg * item;
-      const newResult = [];
-      for (let i = startIndex; i < item + startIndex; i++) {
-        newResult.push(results[i]);
-      }
-      res.json(newResult);
-    });
-});
+//       for (let i = startIndex; i < item + startIndex && i < ressize; i++) {
+//         newResult.push(results[i]);
+//       }
+//       let totalpages = Math.floor(ressize / item) + 1;
+//       res.json({
+//         pageno: pg,
+//         totalpages: totalpages,
+//         totalItems: ressize,
+//         data: newResult,
+//       });
+//     });
+// });
 
-movieRouter.get("/actor", (req, res) => {
-  const pg = parseInt(req.query.pg) || 0;
-  const item = parseInt(req.query.item) || 5;
-  const n1 = req.query.name;
-  const name = n1.toLowerCase();
-  const results = [];
-  fs.createReadStream("./data/movies_data.csv")
-    .pipe(csv())
-    .on("data", (data) => {
-      const actor = data.Starring.toLowerCase();
-      if (actor.includes(name)) {
-        results.push(data);
-      }
-    })
-    .on("end", () => {
-      const startIndex = pg * item;
-      const newResult = [];
-      for (let i = startIndex; i < item + startIndex; i++) {
-        newResult.push(results[i]);
-      }
-      res.json(newResult);
-    });
-});
+// movieRouter.get("/director", (req, res) => {
+//   const pg = parseInt(req.query.pg) || 0;
+//   const item = parseInt(req.query.item) || 5;
+//   const n1 = req.query.name;
+//   const name = n1.toLowerCase();
+//   const results = [];
+//   fs.createReadStream("./data/movies_data.csv")
+//     .pipe(csv())
+//     .on("data", (data) => {
+//       const director = data.Directed_By.toLowerCase();
+//       if (director.includes(name)) {
+//         results.push(data);
+//       }
+//     })
+//     .on("end", () => {
+//       const startIndex = pg * item;
+//       const newResult = [];
+//       for (let i = startIndex; i < item + startIndex; i++) {
+//         newResult.push(results[i]);
+//       }
+//       res.json(newResult);
+//     });
+// });
+
+// movieRouter.get("/actor", (req, res) => {
+//   const pg = parseInt(req.query.pg) || 0;
+//   const item = parseInt(req.query.item) || 5;
+//   const n1 = req.query.name;
+//   const name = n1.toLowerCase();
+//   const results = [];
+//   fs.createReadStream("./data/movies_data.csv")
+//     .pipe(csv())
+//     .on("data", (data) => {
+//       const actor = data.Starring.toLowerCase();
+//       if (actor.includes(name)) {
+//         results.push(data);
+//       }
+//     })
+//     .on("end", () => {
+//       const startIndex = pg * item;
+//       const newResult = [];
+//       for (let i = startIndex; i < item + startIndex; i++) {
+//         newResult.push(results[i]);
+//       }
+//       res.json(newResult);
+//     });
+// });
 
 // movieRouter.get("/free", (req, res) => {
 //   const pg = parseInt(req.query.pg) || 0;
@@ -228,5 +232,3 @@ movieRouter.get("/actor", (req, res) => {
 //       res.json(newResult);
 //     });
 // });
-
-module.exports = movieRouter;

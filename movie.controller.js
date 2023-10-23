@@ -56,23 +56,56 @@ function popularMovie(req, res) {
       res.status(500).json({ error: "An error occured!" });
     });
 }
+
 function yearMovie(req, res) {
+  const ry = req.params.ry;
   getAll()
-    .then()
+    .then((results) => {
+      const newResult = [];
+      for (const data of results) {
+        if (ry === data.ReleaseYear) {
+          newResult.push(data);
+        }
+      }
+      res.json(newResult);
+    })
     .catch((e) => {
       res.status(500).json({ error: "An error occured!" });
     });
 }
+
 function directorMovie(req, res) {
+  const n1 = req.query.name;
+  const name = n1.toLowerCase();
   getAll()
-    .then()
+    .then((results) => {
+      const newResult = [];
+      for (const data of results) {
+        const director = data.Directed_By.toLowerCase();
+        if (director.includes(name)) {
+          newResult.push(data);
+        }
+      }
+      res.json(newResult);
+    })
     .catch((e) => {
       res.status(500).json({ error: "An error occured!" });
     });
 }
 function actorMovie(req, res) {
+  const n1 = req.query.name;
+  const name = n1.toLowerCase();
   getAll()
-    .then()
+    .then((results) => {
+      const newResult = [];
+      for (const data of results) {
+        const actor = data.Starring.toLowerCase();
+        if (actor.includes(name)) {
+          newResult.push(data);
+        }
+      }
+      res.json(newResult);
+    })
     .catch((e) => {
       res.status(500).json({ error: "An error occured!" });
     });
