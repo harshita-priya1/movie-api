@@ -18,18 +18,19 @@ function getAll() {
         resolve(results);
       });
   });
-  //   await fs
-  //     .createReadStream(path.join(__dirname, ".", "data", "movies_data.csv"))
-  //     .pipe(csv())
-  //     .on("data", (data) => {
-  //       results.push(data);
-  //     })
-  //     .on("error", (err) => {
-  //       console.log(err);
-  //     })
-  //     .on("end", () => {
-  //       return results;
-  //     });
 }
 
 module.exports = { getAll };
+
+//   await fs
+//     .createReadStream(path.join(__dirname, ".", "data", "movies_data.csv"))
+//     .pipe(csv())
+//     .on("data", (data) => {
+//       results.push(data);
+//     })
+//     .on("error", (err) => {
+//       console.log(err);
+//     })
+//     .on("end", () => {
+//       return results;
+//     });
