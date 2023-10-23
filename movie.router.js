@@ -2,26 +2,29 @@ const express = require("express");
 const csv = require("csv-parser");
 const fs = require("fs");
 
+const { httpGetAllMovies } = require("./movie.controller");
+
 const movieRouter = express.Router();
 
-movieRouter.get("/all", (req, res) => {
-  const pg = parseInt(req.query.pg) || 0;
-  const item = parseInt(req.query.item) || 5;
-  const results = [];
-  fs.createReadStream("./data/movies_data.csv")
-    .pipe(csv())
-    .on("data", (data) => {
-      results.push(data);
-    })
-    .on("end", () => {
-      const startIndex = pg * item;
-      const newResult = [];
-      for (let i = startIndex; i < item + startIndex; i++) {
-        newResult.push(results[i]);
-      }
-      res.json(newResult);
-    });
-});
+movieRouter.get("/all", httpGetAllMovies);
+// movieRouter.get("/all", (req, res) => {
+//   const pg = parseInt(req.query.pg) || 0;
+//   const item = parseInt(req.query.item) || 5;
+//   const results = [];
+//   fs.createReadStream("./data/movies_data.csv")
+//     .pipe(csv())
+//     .on("data", (data) => {
+//       results.push(data);
+//     })
+//     .on("end", () => {
+//       const startIndex = pg * item;
+//       const newResult = [];
+//       for (let i = startIndex; i < item + startIndex; i++) {
+//         newResult.push(results[i]);
+//       }
+//       res.json(newResult);
+//     });
+// });
 
 movieRouter.get("/search", (req, res) => {
   const pg = parseInt(req.query.pg) || 0;
