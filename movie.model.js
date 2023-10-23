@@ -1,9 +1,8 @@
-const { rejects } = require("assert");
 const csv = require("csv-parser");
 const fs = require("fs");
 const path = require("path");
 
-function getAllMovies() {
+function getAll() {
   let results = [];
   return new Promise((resolve, reject) => {
     fs.createReadStream(path.join(__dirname, ".", "data", "movies_data.csv"))
@@ -33,4 +32,4 @@ function getAllMovies() {
   //     });
 }
 
-module.exports = { getAllMovies };
+module.exports = { getAll };
